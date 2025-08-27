@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Skip Ad Video",
+  "version": "1.0",
+  "description": "Skips ad video inside #ad-video-container automatically",
+  "permissions": ["scripting"],
+  "content_scripts": [
+    {
+      "matches": ["*://www.hotstar.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
