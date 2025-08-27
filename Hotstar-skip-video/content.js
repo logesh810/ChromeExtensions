@@ -1,25 +1,30 @@
 function skipAdVideo(container) {
   const videoElement = container.querySelector("video");
   if (videoElement) {
-    // Skip as soon as metadata is available
+    console.log("[HotStar Skipper] Video found in container.");
+
     videoElement.addEventListener("loadedmetadata", () => {
       videoElement.currentTime = videoElement.duration;
-      console.log("Ad skipped 🚀");
+      console.log("[HotStar Skipper] Ad skipped (via loadedmetadata).");
     });
 
-    // If metadata is already loaded
     if (videoElement.readyState >= 1) {
       videoElement.currentTime = videoElement.duration;
-      console.log("Ad skipped 🚀 (already loaded)");
+      console.log("[HotStar Skipper] Ad skipped (already loaded).");
     }
+  } else {
+    console.log("[HotStar Skipper] No video found yet in container.");
   }
 }
 
 function initObserver() {
   const container = document.querySelector("#ad-video-container");
-  if (!container) return;
+  if (!container) {
+    console.log("[HotStar Skipper] #ad-video-container not found.");
+    return;
+  }
 
-  // Watch only inside the container
+  console.log("[HotStar Skipper] Observer attached to #ad-video-container.");
   const observer = new MutationObserver(() => {
     skipAdVideo(container);
   });
@@ -30,9 +35,21 @@ function initObserver() {
   skipAdVideo(container);
 }
 
-// Wait until DOM is ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initObserver);
 } else {
   initObserver();
 }
+
+// Listen for manual trigger from popup
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.action === "skipNow") {
+    console.log("[HotStar Skipper] Manual skip requested.");
+    const container = document.querySelector("#ad-video-container");
+    if (container) {
+      skipAdVideo(container);
+    } else {
+      console.log("[HotStar Skipper] #ad-video-container not found for manual skip.");
+    }
+  }
+});
