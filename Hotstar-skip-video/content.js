@@ -4,12 +4,12 @@ function skipAdVideo(container) {
     console.log("[HotStar Skipper] Video found in container.");
 
     videoElement.addEventListener("loadedmetadata", () => {
-      videoElement.currentTime = videoElement.duration;
+      videoElement.currentTime = videoElement.duration+1;
       console.log("[HotStar Skipper] Ad skipped (via loadedmetadata).");
     });
 
     if (videoElement.readyState >= 1) {
-      videoElement.currentTime = videoElement.duration;
+      videoElement.currentTime = videoElement.duration+1;
       console.log("[HotStar Skipper] Ad skipped (already loaded).");
     }
   } else {
@@ -37,8 +37,12 @@ function initObserver() {
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initObserver);
+   console.log("[HotStar Skipper] loading");
 } else {
-  initObserver();
+  setTimeout(() => {
+    console.log("[HotStar Skipper] else block");
+    initObserver();
+  }, 1000);
 }
 
 // Listen for manual trigger from popup
@@ -49,7 +53,9 @@ chrome.runtime.onMessage.addListener((msg) => {
     if (container) {
       skipAdVideo(container);
     } else {
-      console.log("[HotStar Skipper] #ad-video-container not found for manual skip.");
+      console.log(
+        "[HotStar Skipper] #ad-video-container not found for manual skip."
+      );
     }
   }
 });
