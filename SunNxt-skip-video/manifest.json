@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "hotstar Ad Skipper",
+  "name": "SunNxt Ad Skipper",
   "version": "1.1",
-  "description": "Skips ads on hotstar by fast-forwarding ad videos",
+  "description": "Skips ads on SunNxt by fast-forwarding ad videos",
   "permissions": ["scripting"],
   "content_scripts": [
     {
-      "matches": ["*://www.hotstar.com/*"],
+      "matches": ["*://www.sunnxt.com/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
